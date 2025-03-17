@@ -956,6 +956,10 @@ export class BetterThermostatUi extends LitElement implements LovelaceCard {
               ${this?._hasSummer ? svg`
                 ${(this?._config?.disable_heat || !this.modes.includes('heat')) ? html `` : this._renderIcon("heat", this.mode)}
                 ${(this?._config?.disable_heat || !this.modes.includes('heat_cool')) ? html `` : this._renderHVACIcon(this.mode)}
+                ${(this?._config?.disable_cool || !this.modes.includes('cool')) ? html `` : this._renderIcon("cool", this.mode)}
+                ${(this?._config?.disable_auto || !this.modes.includes('auto')) ? html `` : this._renderIcon("auto", this.mode)}
+                ${(this?._config?.disable_dry || !this.modes.includes('dry')) ? html `` : this._renderIcon("dry", this.mode)}
+                ${(this?._config?.disable_fan_only || !this.modes.includes('fan_only')) ? html `` : this._renderIcon("fan_only", this.mode)}
                 ${this?._config?.disable_eco ? html `` :
                   this?.stateObj?.attributes?.saved_temperature &&
                   this?.stateObj?.attributes?.saved_temperature !== "none" &&
@@ -966,11 +970,17 @@ export class BetterThermostatUi extends LitElement implements LovelaceCard {
               svg`
                 ${this.modes.map((mode) => {
                   if(this._config?.disable_heat && (mode === "heat" || mode === "heat_cool")) return html ``;
+                  if(this._config?.disable_cool && (mode === "cool" || mode === "heat_cool")) return html ``;
+                  if(this._config?.disable_auto && mode === "auto") return html ``;
+                  if(this._config?.disable_dry && mode === "dry") return html ``;
+                  if(this._config?.disable_fan_only && mode === "fan_only") return html ``;
                   if(this._config?.disable_eco && mode === "eco") return html ``;
                   if(this._config?.disable_off && mode === "off") return html ``;
                   return this._renderIcon(mode, this.mode);
                 })}
-              `}
+              `
+            }
+
 
             </div>
             ${this?._config?.disable_buttons ? html`` : html`
